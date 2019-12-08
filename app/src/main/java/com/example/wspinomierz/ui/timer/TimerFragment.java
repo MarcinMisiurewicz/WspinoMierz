@@ -43,7 +43,7 @@ public class TimerFragment extends Fragment {
         startButton = root.findViewById(R.id.start_button);
         pauseButton = root.findViewById(R.id.pause_button);
         resetButton = root.findViewById(R.id.reset_button);
-        //TODO: nie da się tego zrobić bez listenerów, tylko w xmlu zrobić onClick?
+        //TODO: nie da się tego zrobić bez listenerów, tylko w xmlu zrobić onClick?asdadasdas
         startButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View root) {
