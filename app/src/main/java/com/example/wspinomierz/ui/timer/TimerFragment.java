@@ -19,6 +19,7 @@ import com.example.wspinomierz.R;
 
 public class TimerFragment extends Fragment {
     //TODO: Countdown for chrono
+    //TODO: upload wyniku timera do listy
     private TimerViewModel timerViewModel;
     private Chronometer chronometer;
     private long pauseOffset;
