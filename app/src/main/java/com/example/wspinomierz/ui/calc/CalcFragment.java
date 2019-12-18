@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.wspinomierz.R;
 
 public class CalcFragment extends Fragment {
-
+    //lala
     private CalcViewModel calcViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
