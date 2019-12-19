@@ -52,7 +52,8 @@ public class CalcFragment extends Fragment implements View.OnClickListener {
 
         //TODO = scales_map.keySet()
         final String [] scales = {"UIAA","Francuska","Kurtyki","USA",};
-        current_grades1 = scales_map.get(scales[0]);
+        current_grades1 = new ArrayList<String>();
+        current_grades1.addAll(scales_map.get(scales[0]));
         current_grades2 = scales_map.get(scales[0]);
         Toast.makeText(getActivity(), myint.toString(),Toast.LENGTH_SHORT).show();
 
