@@ -83,7 +83,7 @@ public class CalcFragment extends Fragment implements View.OnClickListener {
         scales_map.put("Francuska", francuska);
         scales_map.put("USA", usa);
 
-        //TODO = scales_map.keySet()
+        //TODO = scales_map.keySet()asdasd
         final String [] scales = {"UIAA","Francuska","Kurtyki","USA",};
         current_grades1 = new ArrayList<String>();
         current_grades1.addAll(scales_map.get(scales[0]));
