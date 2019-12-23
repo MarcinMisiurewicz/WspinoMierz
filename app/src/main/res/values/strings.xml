@@ -9,6 +9,7 @@
 
     <string name="menu_home">Główna</string>
     <string name="menu_list">Przejścia</string>
+    <string name="menu_addRoute">Dodaj przejście</string>
     <string name="menu_statistics">Statystyki</string>
     <string name="menu_map">Mapa</string>
     <string name="menu_timer">Stoper</string>

@@ -18,6 +18,12 @@
         tools:layout="@layout/fragment_list" />
 
     <fragment
+        android:id="@+id/nav_addRoute"
+        android:name="com.example.wspinomierz.ui.addRoute.addRouteFragment"
+        android:label="@string/menu_addRoute"
+        tools:layout="@layout/fragment_addroute" />
+
+    <fragment
         android:id="@+id/nav_statistics"
         android:name="com.example.wspinomierz.ui.statistics.StatisticsFragment"
         android:label="@string/menu_statistics"
