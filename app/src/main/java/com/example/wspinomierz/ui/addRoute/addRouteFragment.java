@@ -26,7 +26,7 @@ public class addRouteFragment extends Fragment {
 
     private com.example.wspinomierz.ui.addRoute.addRouteViewModel addRouteViewModel;
     private Route routeToAdd;
-
+    //przerzucic do oddzielnego pliku
     private HashMap<String, Integer> kurtyki2int = new HashMap<String, Integer>() {{
         put("I", 0);
         put("II", 1);
