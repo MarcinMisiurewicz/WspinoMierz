@@ -16,15 +16,15 @@ import com.example.wspinomierz.R;
 
 public class ListFragment extends Fragment {
 
-    private ListViewModel calcViewModel;
+    private ListViewModel listViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        calcViewModel =
+        listViewModel =
                 ViewModelProviders.of(this).get(ListViewModel.class);
         View root = inflater.inflate(R.layout.fragment_list, container, false);
         final TextView textView = root.findViewById(R.id.text_list);
-        calcViewModel.getText().observe(this, new Observer<String>() {
+        listViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
