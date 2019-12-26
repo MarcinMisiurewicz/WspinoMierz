@@ -1,4 +1,4 @@
-package com.example.wspinomierz.directionhelpers;
+package com.example.wspinomierz.ui.map.directionhelpers;
 
 import android.content.Context;
 import android.os.AsyncTask;

@@ -1,4 +1,4 @@
-package com.example.wspinomierz.directionhelpers;
+package com.example.wspinomierz.ui.map.directionhelpers;
 
 /**
  * Created by Vishal on 10/20/2018.

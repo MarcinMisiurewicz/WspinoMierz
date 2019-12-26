@@ -1,4 +1,4 @@
-package com.example.wspinomierz.directionhelpers;
+package com.example.wspinomierz.ui.map.directionhelpers;
 
 import com.google.android.gms.maps.model.LatLng;
 
