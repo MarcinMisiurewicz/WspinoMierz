@@ -2,6 +2,8 @@ package com.example.wspinomierz.ui.map.Modules;
 
 import android.os.AsyncTask;
 
+import androidx.core.content.ContextCompat;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -18,21 +20,24 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import com.example.wspinomierz.R;
 
 /**
  * Created by Mai Thanh Hiep on 4/3/2016.
  */
 public class DirectionFinder {
     private static final String DIRECTION_URL_API = "https://maps.googleapis.com/maps/api/directions/json?";
-    private static final String GOOGLE_API_KEY = "AIzaSyBrddjfNCaAGvVDsk6C8MQhvzYoBdc4414";
+//    private static final String GOOGLE_API_KEY = "AIzaSyBrddjfNCaAGvVDsk6C8MQhvzYoBdc4414";
+    private String GOOGLE_API_KEY;//"@secrets/google_maps_secret_key";
     private DirectionFinderListener listener;
     private String origin;
     private String destination;
 
-    public DirectionFinder(DirectionFinderListener listener, String origin, String destination) {
+    public DirectionFinder(DirectionFinderListener listener, String origin, String destination, String google_api_key) {
         this.listener = listener;
         this.origin = origin;
         this.destination = destination;
+        this.GOOGLE_API_KEY = google_api_key;
     }
 
     public void execute() throws UnsupportedEncodingException {
