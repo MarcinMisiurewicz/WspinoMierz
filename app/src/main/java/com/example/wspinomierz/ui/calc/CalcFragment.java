@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Arrays;
 
+//test z lapka
 public class CalcFragment extends Fragment implements View.OnClickListener {
     private CalcViewModel calcViewModel;
 
