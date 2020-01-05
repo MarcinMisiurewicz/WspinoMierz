@@ -201,8 +201,8 @@ public class DirsFragment extends Fragment implements OnMapReadyCallback, Direct
                 .color(Color.RED)
         );
 
-//        String origin = Double.toString(latitudeFrom) + Double.toString(latitudeFrom);
-        String origin = "Warsaw";
+        String origin = Double.toString(latitudeFrom) + ',' + Double.toString(longitudeFrom);
+//        String origin = "Warsaw";
         String destination = "Berlin";
         try {
             new DirectionFinder(this, origin, destination, getString(R.string.google_maps_secret_key)).execute();

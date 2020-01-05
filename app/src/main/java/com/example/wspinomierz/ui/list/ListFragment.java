@@ -23,13 +23,13 @@ public class ListFragment extends Fragment {
         listViewModel =
                 ViewModelProviders.of(this).get(ListViewModel.class);
         View root = inflater.inflate(R.layout.fragment_list, container, false);
-        final TextView textView = root.findViewById(R.id.text_list);
-        listViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+//        final TextView textView = root.findViewById(R.id.text_list);
+//        listViewModel.getText().observe(this, new Observer<String>() {
+//            @Override
+//            public void onChanged(@Nullable String s) {
+//                textView.setText(s);
+//            }
+//        });
         return root;
     }
 }
