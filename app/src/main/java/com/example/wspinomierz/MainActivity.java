@@ -1,5 +1,6 @@
 package com.example.wspinomierz;
 
+import android.location.Location;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -25,6 +26,9 @@ import android.view.Menu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -36,10 +40,23 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private View header;
 
+    public ArrayList<Route> getRouteList() {
+        return routeList;
+    }
+
+    public ArrayList<Route> routeList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        routeList = new ArrayList<Route>(
+                Arrays.asList(
+                        new Route("a", 0, new Location("gps"), 0, 1, 1),
+                        new Route("b", 1, new Location("gps"), 2, 2, 2),
+                        new Route("c", 2, new Location("gps"), 4, 3, 3)
+                )
+        );
         mFirebaseAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_main);
         InitializeUI();
