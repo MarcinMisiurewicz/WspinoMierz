@@ -186,10 +186,11 @@ public class DirsFragment extends Fragment implements OnMapReadyCallback, Direct
 //            locationManager.requestSingleUpdate("gps", locationListener);
         locationManager.requestLocationUpdates("gps", 5000, 20, locationListener);
 //        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if (locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER))
-            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
         if (locationManager.isProviderEnabled( LocationManager.NETWORK_PROVIDER))
             location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+//        if (locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER))
+//            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         latitudeFrom = location.getLatitude();
         longitudeFrom = location.getLongitude();
         locationManager.removeUpdates(locationListener);
@@ -201,8 +202,8 @@ public class DirsFragment extends Fragment implements OnMapReadyCallback, Direct
                 .color(Color.RED)
         );
 
-//        String origin = Double.toString(latitudeFrom) + Double.toString(latitudeFrom);
-        String origin = "Warsaw";
+        String origin = Double.toString(latitudeFrom) + ',' + Double.toString(longitudeFrom);
+//        String origin = "Warsaw";
         String destination = "Berlin";
         try {
             new DirectionFinder(this, origin, destination, getString(R.string.google_maps_secret_key)).execute();
