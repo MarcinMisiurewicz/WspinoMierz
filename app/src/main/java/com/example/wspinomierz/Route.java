@@ -1,4 +1,4 @@
-package com.example.wspinomierz.ui;
+package com.example.wspinomierz;
 
 import android.location.Location;
 
@@ -17,6 +17,30 @@ public class Route {
         userGrade = u;
         routeTime = r;
         pitchNumber = p;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Integer getGrade() {
+        return grade;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public Integer getUserGrade() {
+        return userGrade;
+    }
+
+    public Integer getRouteTime() {
+        return routeTime;
+    }
+
+    public Integer getPitchNumber() {
+        return pitchNumber;
     }
 
     public String pprint() {

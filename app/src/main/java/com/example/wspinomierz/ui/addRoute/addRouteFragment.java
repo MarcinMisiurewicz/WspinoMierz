@@ -15,8 +15,10 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.wspinomierz.MainActivity;
 import com.example.wspinomierz.R;
-import com.example.wspinomierz.ui.Route;
+import com.example.wspinomierz.Route;
+import com.example.wspinomierz.ScaleConverter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,29 +28,15 @@ public class addRouteFragment extends Fragment {
 
     private com.example.wspinomierz.ui.addRoute.addRouteViewModel addRouteViewModel;
     private Route routeToAdd;
-    //przerzucic do oddzielnego pliku
-    private HashMap<String, Integer> kurtyki2int = new HashMap<String, Integer>() {{
-        put("I", 0);
-        put("II", 1);
-        put("II+", 2);
-        put("III", 3);
-        put("IV", 4);
-        put("IV+", 6);
-        put("V-", 7);
-        put("V", 8);
-        put("V+", 9);
-        put("VI-", 10);
-        put("VI", 11);
-        put("VI+", 12);
-        put("VI.1", 13);
-    }};
+    private MainActivity context;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+                             final ViewGroup container, Bundle savedInstanceState) {
         addRouteViewModel =
                 ViewModelProviders.of(this).get(com.example.wspinomierz.ui.addRoute.addRouteViewModel.class);
         View root = inflater.inflate(R.layout.fragment_addroute, container, false);
 
+        final ScaleConverter scaleConverter = new ScaleConverter();
         final EditText routeNameEditText = root.findViewById(R.id.routeName);
         final Spinner gradeSpinner = root.findViewById(R.id.grade);
         final Spinner userGradeSpinner = root.findViewById(R.id.userGrade);
@@ -56,7 +44,7 @@ public class addRouteFragment extends Fragment {
         final EditText pitchNumberEditText = root.findViewById(R.id.pitchNumber);
         final Button addButton = root.findViewById(R.id.addButton);
 
-        final ArrayList<String> kurtykiGrade = new ArrayList<>(Arrays.asList("Wycena", "I", "II", "II+", "III", "IV", "IV", "IV+", "V-", "V", "V+", "VI", "VI+", "VI.1"));
+        final ArrayList<String> kurtykiGrade = new ArrayList<>(Arrays.asList("Wycena", "I", "II", "II+", "III", "IV", "IV+", "V-", "V", "V+", "VI", "VI+", "VI.1"));
         final ArrayList<String> kurtykiUserGrade = new ArrayList<>(Arrays.asList("Twoja wycena", "I", "II", "II+", "III", "IV", "IV", "IV+", "V-", "V", "V+", "VI", "VI+", "VI.1"));
 
         ArrayAdapter<String> gradeAdapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_spinner_item, kurtykiGrade);
@@ -80,12 +68,12 @@ public class addRouteFragment extends Fragment {
                     Toast.makeText(getActivity(), "Dodaj wycenę!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Integer grade = kurtyki2int.get(gradeSpinner.getSelectedItem().toString());
+                Integer grade = scaleConverter.String2Int("Kurtyki", gradeSpinner.getSelectedItem().toString());
                 if(userGradeSpinner.getSelectedItemPosition() == 0) {
                     Toast.makeText(getActivity(), "Dodaj swoją wycenę!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Integer userGrade = kurtyki2int.get(userGradeSpinner.getSelectedItem().toString());
+                Integer userGrade = scaleConverter.String2Int("Kurtyki", userGradeSpinner.getSelectedItem().toString());
                 Location location = new Location("test");
                 location.setLongitude(0);
                 location.setLatitude(0);
@@ -93,7 +81,8 @@ public class addRouteFragment extends Fragment {
                     Toast.makeText(getActivity(), "Dodaj czas przejścia!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Integer routeTime = Integer.parseInt(routeTimeEditText.getText().toString());
+
+                Integer routeTime = toSeconds(routeTimeEditText.getText().toString());
                 if(pitchNumberEditText.getText().toString().isEmpty()) {
                     Toast.makeText(getActivity(), "Dodaj liczbę wyciągów!", Toast.LENGTH_SHORT).show();
                     return;
@@ -101,6 +90,8 @@ public class addRouteFragment extends Fragment {
                 Integer pitchNumber = Integer.parseInt(pitchNumberEditText.getText().toString());
                 routeToAdd = new Route(name, grade, location, userGrade, routeTime, pitchNumber);
                 Toast.makeText(getActivity(), routeToAdd.pprint(), Toast.LENGTH_SHORT).show();
+                context = (MainActivity) getActivity();
+                context.routeList.add(routeToAdd);
             }
         });
 //        addRouteViewModel.getText().observe(this, new Observer<String>() {
@@ -110,5 +101,16 @@ public class addRouteFragment extends Fragment {
 //            }
 //        });
         return root;
+    }
+
+    private static int toSeconds(String s) {
+        if(s.indexOf(":") != -1) {
+            String[] minSec = s.split(":");
+            int mins = Integer.parseInt(minSec[0]);
+            int secs = Integer.parseInt(minSec[1]);
+            int secsInMins = mins * 60;
+            return secsInMins + mins;
+        }
+        return Integer.parseInt(s);
     }
 }
