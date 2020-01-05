@@ -3,14 +3,20 @@ package com.example.wspinomierz.ui.map;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.LocalServerSocket;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +32,8 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.wspinomierz.R;
 import com.example.wspinomierz.ui.map.directionhelpers.FetchURL;
 import com.example.wspinomierz.ui.map.directionhelpers.TaskLoadedCallback;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -41,6 +49,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.example.wspinomierz.ui.map.Modules.DirectionFinder;
 import com.example.wspinomierz.ui.map.Modules.DirectionFinderListener;
 import com.example.wspinomierz.ui.map.Modules.Route;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -53,6 +62,7 @@ public class DirsFragment extends Fragment implements OnMapReadyCallback, Direct
 
     private GoogleMap map;
     private MarkerOptions place1, place2;
+    private FusedLocationProviderClient fusedLocationClient;
     private MapViewModel mapViewModel;
     private Polyline currentPolyline;
     private Location location;
@@ -60,6 +70,8 @@ public class DirsFragment extends Fragment implements OnMapReadyCallback, Direct
     private double longitudeFrom;
     private LocationManager locationManager;
     private LocationListener locationListener;
+    final Looper looper = null;
+    Criteria criteria;
 
 
     private List<Marker> originMarkers = new ArrayList<>();
@@ -88,6 +100,7 @@ public class DirsFragment extends Fragment implements OnMapReadyCallback, Direct
 //                textView.setText(s);
 //            }
 //        });
+        requestPermissions(LOCATION_PERMS, LOCATION_REQUEST);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapFrag);
         mapFragment.getMapAsync(this);
         if (mapFragment == null) {
@@ -97,6 +110,7 @@ public class DirsFragment extends Fragment implements OnMapReadyCallback, Direct
             ft.replace(R.id.mapFrag, mapFragment).commit();
         }
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
         //TODO: tu trzeba dodać właściwe miesjca
         place1 = new MarkerOptions()
                 .position(new LatLng(52.248212, 20.972353))
@@ -112,12 +126,11 @@ public class DirsFragment extends Fragment implements OnMapReadyCallback, Direct
 //        MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.mapFrag);
         requestPermissions(INITIAL_PERMS, INITIAL_REQUEST);
 
-        locationManager = (LocationManager)
-                getActivity().getSystemService(LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-
+                latitudeFrom = location.getLatitude();
+                longitudeFrom = location.getLongitude();
             }
 
             @Override
@@ -135,6 +148,19 @@ public class DirsFragment extends Fragment implements OnMapReadyCallback, Direct
 
             }
         };
+
+        criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+        criteria.setPowerRequirement(Criteria.POWER_LOW);
+        criteria.setAltitudeRequired(false);
+        criteria.setBearingRequired(false);
+        criteria.setSpeedRequired(false);
+        criteria.setCostAllowed(false);
+        criteria.setHorizontalAccuracy(Criteria.ACCURACY_HIGH);
+        criteria.setVerticalAccuracy(Criteria.ACCURACY_HIGH);
+
+        locationManager = (LocationManager)
+                getActivity().getSystemService(LOCATION_SERVICE);
         return root;
     }
 
@@ -146,12 +172,7 @@ public class DirsFragment extends Fragment implements OnMapReadyCallback, Direct
         map.addMarker(place2);
         map.setMyLocationEnabled(true);
 
-        requestPermissions(LOCATION_PERMS, LOCATION_REQUEST);
 
-
-
-
-        Criteria criteria = new Criteria();
 //        if (ContextCompat.checkSelfPermission( this,android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED )
 //        {
 //            ActivityCompat.requestPermissions(
@@ -170,7 +191,8 @@ public class DirsFragment extends Fragment implements OnMapReadyCallback, Direct
 //            double longitude = 20.972353;
 //        }
 
-
+//        turnGPSon();
+//
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 requestPermissions(new String[] {
@@ -183,16 +205,19 @@ public class DirsFragment extends Fragment implements OnMapReadyCallback, Direct
             }
             return;
         }
-//            locationManager.requestSingleUpdate("gps", locationListener);
-        locationManager.requestLocationUpdates("gps", 5000, 20, locationListener);
-//        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if (locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER))
-            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//
+//
+        locationManager.requestSingleUpdate(criteria, locationListener, looper);
+//        locationManager.requestLocationUpdates("gps", 5000, 20, locationListener);
+////        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if (locationManager.isProviderEnabled( LocationManager.NETWORK_PROVIDER))
             location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+//        if (locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER))
+//            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         latitudeFrom = location.getLatitude();
         longitudeFrom = location.getLongitude();
-        locationManager.removeUpdates(locationListener);
+//        locationManager.removeUpdates(locationListener);
+
 
 
         map.addPolyline(new PolylineOptions()
@@ -201,8 +226,8 @@ public class DirsFragment extends Fragment implements OnMapReadyCallback, Direct
                 .color(Color.RED)
         );
 
-//        String origin = Double.toString(latitudeFrom) + Double.toString(latitudeFrom);
-        String origin = "Warsaw";
+        String origin = Double.toString(latitudeFrom)+ "," + Double.toString(longitudeFrom);
+//        String origin = "Warsaw";
         String destination = "Berlin";
         try {
             new DirectionFinder(this, origin, destination, getString(R.string.google_maps_secret_key)).execute();
@@ -286,6 +311,16 @@ public class DirsFragment extends Fragment implements OnMapReadyCallback, Direct
             polylinePaths.add(map.addPolyline(polylineOptions));
         }
     }
+
+//    private Location getLastKnownLocation() {
+//        List<String> providers = locationManager.getProviders(true);
+//        Location bestLocation = null;
+//        for (String provider : providers) {
+//            Location l = locationManager.getLastKnownLocation(provider);
+//
+//        }
+//    }
+
 
 
 }

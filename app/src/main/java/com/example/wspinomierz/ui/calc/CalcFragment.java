@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Arrays;
 
+//test z lapka
 public class CalcFragment extends Fragment implements View.OnClickListener {
     private CalcViewModel calcViewModel;
 
@@ -29,10 +30,11 @@ public class CalcFragment extends Fragment implements View.OnClickListener {
     private ArrayList<String> current_grades1;
     private ArrayAdapter<String> gradesAdapter1;
     private TextView resultGradeTextView;
+    private Spinner gradeSpinner1;
 
     //TODO: przenieść to do resources Strings i rozszerzyć
     ArrayList<String> uiaa = new ArrayList<>(Arrays.asList("I", "II", "II+", "III", "IV", "IV+", "V-", "V", "V+", "VI", "VI+", "VII-"));
-    ArrayList<String> kurtyki = new ArrayList<>(Arrays.asList("I", "II", "II+", "III", "IV", "IV", "IV+", "V-", "V", "V+", "VI", "VI+", "VI.1"));
+    ArrayList<String> kurtyki = new ArrayList<>(Arrays.asList("I", "II", "II+", "III", "IV", "IV+", "V-", "V", "V+", "VI", "VI+", "VI.1"));
     ArrayList<String> francuska  = new ArrayList<>(Arrays.asList("1", "2", "2+", "3", "4a", "4b", "4c", "5a", "5b", "5c", "6a", "6a+", "6b"));
     ArrayList<String> usa  = new ArrayList<>(Arrays.asList("5.1", "5.2", "5.3", "5.4", "5.5", "5.6", "5.7", "5.8", "5.9", "5.10a", "5.10b"));
 
@@ -186,8 +188,8 @@ public class CalcFragment extends Fragment implements View.OnClickListener {
 
 
         final Spinner scaleSpinner1 = root.findViewById(R.id.spinner1);
-        Spinner scaleSpinner2 = root.findViewById(R.id.spinner2);
-        Spinner gradeSpinner1 = root.findViewById(R.id.spinner3);
+        final Spinner scaleSpinner2 = root.findViewById(R.id.spinner2);
+        gradeSpinner1 = root.findViewById(R.id.spinner3);
         resultGradeTextView = root.findViewById(R.id.textGrade);
 
         Button convert = root.findViewById(R.id.convertButton);
@@ -197,36 +199,7 @@ public class CalcFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View root) {
                 Toast.makeText(getActivity(),"przliczam",Toast.LENGTH_SHORT).show();
-                Integer scaleInInt = 0;
-                String scaleInString = "I";
-                switch (choosen_scale_from){
-                    case "UIAA":
-                        scaleInInt = Integer.valueOf(uiaa2int.get(choosen_grade_from));
-                        break;
-                    case "Francuska":
-                        scaleInInt = Integer.valueOf(francuska2int.get(choosen_grade_from));
-                        break;
-                    case "Kurtyki":
-                        scaleInInt = Integer.valueOf(kurtyki2int.get(choosen_grade_from));
-                        break;
-                    case "USA":
-                        scaleInInt = Integer.valueOf(usa2int.get(choosen_grade_from));
-                        break;
-                }
-                switch (choosen_scale_to){
-                    case "Francuska":
-                        scaleInString = int2francuska.get(scaleInInt);
-                        break;
-                    case "Kurtyki":
-                        scaleInString = int2kurtyki.get(scaleInInt);
-                        break;
-                    case "UIAA":
-                        scaleInString = int2uiaa.get(scaleInInt);
-                        break;
-                    case "USA":
-                        scaleInString = int2usa.get(scaleInInt);
-                        break;
-                }
+                String scaleInString = convertGrades(choosen_scale_from, choosen_scale_to, choosen_grade_from);
                 resultGradeTextView.setText(scaleInString);
             }
         });
@@ -238,6 +211,10 @@ public class CalcFragment extends Fragment implements View.OnClickListener {
             public void onClick(View root) {
                 Toast.makeText(getActivity(),"aaa",Toast.LENGTH_SHORT).show();
                 //TODO: zrobić przerzucenien skal prawo-lewo
+                Integer old_right_selection = scaleSpinner2.getSelectedItemPosition();
+                Integer old_left_selection = scaleSpinner1.getSelectedItemPosition();
+                scaleSpinner1.setSelection(old_right_selection);
+                scaleSpinner2.setSelection(old_left_selection);
             }
         });
 
@@ -255,11 +232,14 @@ public class CalcFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         Object item = parent.getItemAtPosition(position);
+                        String choosen_scale_from_old = choosen_scale_from;
                         choosen_scale_from = item.toString();
                         current_grades1.clear();
                         current_grades1.addAll(scales_map.get(item.toString()));
                         gradesAdapter1.notifyDataSetChanged();
-                        choosen_grade_from = current_grades1.get(0);
+                        if (choosen_scale_to != null) {
+                            choosen_grade_from = gradeSpinner1.getSelectedItem().toString();
+                        }
                         Toast.makeText(getActivity(), "wybrano " + item.toString(),Toast.LENGTH_SHORT).show();
                     }
 
@@ -297,7 +277,7 @@ public class CalcFragment extends Fragment implements View.OnClickListener {
 
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
-
+                        Toast.makeText(getActivity(), "bbbb",Toast.LENGTH_LONG).show();
                     }
                 }
         );
@@ -316,5 +296,39 @@ public class CalcFragment extends Fragment implements View.OnClickListener {
     public void onClick(View root) {
 
 
+    }
+
+    private String convertGrades(String scale_from, String scale_to, String grade_from) {
+        Integer scaleInInt = 0;
+        String scaleInString = "I";
+        switch (scale_from){
+            case "UIAA":
+                scaleInInt = Integer.valueOf(uiaa2int.get(grade_from));
+                break;
+            case "Francuska":
+                scaleInInt = Integer.valueOf(francuska2int.get(grade_from));
+                break;
+            case "Kurtyki":
+                scaleInInt = Integer.valueOf(kurtyki2int.get(grade_from));
+                break;
+            case "USA":
+                scaleInInt = Integer.valueOf(usa2int.get(grade_from));
+                break;
+        }
+        switch (scale_to){
+            case "Francuska":
+                scaleInString = int2francuska.get(scaleInInt);
+                break;
+            case "Kurtyki":
+                scaleInString = int2kurtyki.get(scaleInInt);
+                break;
+            case "UIAA":
+                scaleInString = int2uiaa.get(scaleInInt);
+                break;
+            case "USA":
+                scaleInString = int2usa.get(scaleInInt);
+                break;
+        }
+        return scaleInString;
     }
 }
