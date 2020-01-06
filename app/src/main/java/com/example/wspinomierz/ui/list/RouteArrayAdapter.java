@@ -58,7 +58,7 @@ public class RouteArrayAdapter extends ArrayAdapter<Route> {
         tvUserGrade.setText(scaleConverter.Int2String("Kurtyki", userGrade));
         tvRouteTime.setText(routeTime.toString());
         tvPitchNumber.setText(pitchNumber.toString());
-        tvLocation.setText(location.getLongitude() + "," + location.getLatitude());
+        tvLocation.setText(location.getLatitude() + "," + location.getLongitude());
         return convertView;
     }
 }

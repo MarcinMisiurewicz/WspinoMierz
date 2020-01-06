@@ -273,7 +273,7 @@ public class DirsFragment extends Fragment implements OnMapReadyCallback, Direct
         destinationMarkers = new ArrayList<>();
 
         for (Route route : routes) {
-//            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
             originMarkers.add(map.addMarker(new MarkerOptions()
                     .title(route.startAddress)
                     .position(route.startLocation)
