@@ -35,6 +35,7 @@ import java.util.HashMap;
 
 import static android.content.Context.LOCATION_SERVICE;
 
+//TODO: zrobić pole z dodawaniem location dla dróg planowanych
 public class addRouteFragment extends Fragment {
 
     private com.example.wspinomierz.ui.addRoute.addRouteViewModel addRouteViewModel;
