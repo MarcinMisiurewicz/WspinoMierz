@@ -1,14 +1,14 @@
-package com.example.wspinomierz.ui.statistics;
+package com.example.wspinomierz.ui.pastList;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class StatisticsViewModel extends ViewModel {
+public class PastListViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public StatisticsViewModel() {
+    public PastListViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is send fragment");
     }

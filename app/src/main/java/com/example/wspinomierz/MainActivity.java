@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public ArrayList<Route> routeList;
+    public ArrayList<Route> pastRouteList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +76,13 @@ public class MainActivity extends AppCompatActivity {
                         new Route("a", 0, testLocation, 0, 1, 1),
                         new Route("b", 1, testLocation, 2, 2, 2),
                         new Route("c", 2, testLocation, 4, 3, 3)
+                )
+        );
+
+        pastRouteList = new ArrayList<Route>(
+                Arrays.asList(
+                        new Route("a past", 0, testLocation, 0, 1, 1),
+                        new Route("b past", 1, testLocation, 2, 2, 2)
                 )
         );
 

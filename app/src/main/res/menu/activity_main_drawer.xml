@@ -18,8 +18,8 @@
             android:title="@string/menu_list" />
         <item
             android:id="@+id/nav_statistics"
-            android:icon="@drawable/ic_menu_statistics"
-            android:title="@string/menu_statistics" />
+            android:icon="@drawable/ic_menu_past_list_black_24dp"
+            android:title="@string/menu_pastList" />
         <item
             android:id="@+id/nav_map"
             android:icon="@drawable/ic_menu_dirs"

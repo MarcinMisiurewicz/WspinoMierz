@@ -12,16 +12,18 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="Witaj!"
+        android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textViewMeanText"
-        android:layout_width="100dp"
+        android:layout_width="140dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="średnia:"
+        android:text="Średnia:"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewWelcome" />
 
@@ -32,16 +34,18 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="Value"
+        android:textSize="24sp"
         app:layout_constraintStart_toEndOf="@+id/textViewMeanText"
         app:layout_constraintTop_toBottomOf="@+id/textViewWelcome" />
 
     <TextView
         android:id="@+id/textViewMaxText"
-        android:layout_width="100dp"
+        android:layout_width="140dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="TextView"
+        android:text="Życiówka:"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewMeanText" />
 
@@ -52,7 +56,30 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="Value"
+        android:textSize="24sp"
         app:layout_constraintStart_toEndOf="@+id/textViewMaxText"
         app:layout_constraintTop_toBottomOf="@+id/textViewMeanValue" />
+
+    <TextView
+        android:id="@+id/textViewCountText"
+        android:layout_width="140dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Liczba tras:"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewMaxText" />
+
+    <TextView
+        android:id="@+id/textViewCountValue"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Value"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/textViewCountText"
+        app:layout_constraintTop_toBottomOf="@+id/textViewMaxValue" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
