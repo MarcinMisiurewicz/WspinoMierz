@@ -51,12 +51,14 @@ public class RouteArrayAdapter extends ArrayAdapter<Route> {
         TextView tvUserGrade = convertView.findViewById(R.id.textViewUserGrade);
         TextView tvRouteTime = convertView.findViewById(R.id.textViewRouteTime);
         TextView tvPitchNumber = convertView.findViewById(R.id.textViewPitchNumber);
+        TextView tvLocation = convertView.findViewById(R.id.textViewLocation);
 
         tvName.setText(name);
         tvGrade.setText(scaleConverter.Int2String("Kurtyki", grade));
         tvUserGrade.setText(scaleConverter.Int2String("Kurtyki", userGrade));
         tvRouteTime.setText(routeTime.toString());
         tvPitchNumber.setText(pitchNumber.toString());
+        tvLocation.setText(location.getLongitude() + "," + location.getLatitude());
         return convertView;
     }
 }

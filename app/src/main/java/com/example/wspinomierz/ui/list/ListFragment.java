@@ -1,12 +1,15 @@
 package com.example.wspinomierz.ui.list;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +27,7 @@ import com.example.wspinomierz.R;
 
 import com.example.wspinomierz.Route;
 import com.example.wspinomierz.ui.addRoute.addRouteFragment;
+import com.example.wspinomierz.ui.map.DirsFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -64,6 +68,21 @@ public class ListFragment extends Fragment {
             }
         });
 
+//        final LinearLayout rowLayout = root.findViewById(R.id.rowLayout);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                TextView tvName = v.findViewById(R.id.textViewName);
+                TextView tvLoc = v.findViewById(R.id.textViewLocation);
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                DirsFragment NAME = new DirsFragment();
+                NAME.locationTo = tvLoc.getText().toString();
+                NAME.locationToName = tvName.getText().toString();
+                fragmentTransaction.replace(R.id.nav_host_fragment, NAME);
+                fragmentTransaction.commit();
+            }
+        });
         return root;
     }
 }

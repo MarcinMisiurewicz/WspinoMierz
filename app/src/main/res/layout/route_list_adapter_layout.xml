@@ -4,6 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="60dp"
     android:weightSum="35"
+    android:descendantFocusability="blocksDescendants"
+    android:clickable="false"
+    android:id="@+id/rowLayout"
     >
 
     <TextView
@@ -11,6 +14,7 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_weight="15"
+        android:clickable="false"
         android:text="textViewName"
         android:textAlignment="center" />
 
@@ -19,6 +23,7 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_weight="5"
+        android:clickable="false"
         android:text="textViewGrade"
         android:textAlignment="center" />
 
@@ -27,6 +32,7 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_weight="5"
+        android:clickable="false"
         android:text="textViewUserGrade"
         android:textAlignment="center" />
 
@@ -35,6 +41,7 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_weight="5"
+        android:clickable="false"
         android:text="textViewRouteTime"
         android:textAlignment="center" />
 
@@ -43,6 +50,18 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_weight="5"
+        android:clickable="false"
+        android:gravity="center"
+        android:text="textViewPitchNumber"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/textViewLocation"
+        android:visibility="invisible"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_weight="0"
+        android:clickable="false"
         android:gravity="center"
         android:text="textViewPitchNumber"
         android:textAlignment="center" />
