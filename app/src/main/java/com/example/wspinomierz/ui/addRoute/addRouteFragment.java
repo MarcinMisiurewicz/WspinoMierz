@@ -1,7 +1,14 @@
 package com.example.wspinomierz.ui.addRoute;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -24,11 +32,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import static android.content.Context.LOCATION_SERVICE;
+
 public class addRouteFragment extends Fragment {
 
     private com.example.wspinomierz.ui.addRoute.addRouteViewModel addRouteViewModel;
     private Route routeToAdd;
     private MainActivity context;
+
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              final ViewGroup container, Bundle savedInstanceState) {
@@ -47,6 +59,7 @@ public class addRouteFragment extends Fragment {
         final ArrayList<String> kurtykiGrade = new ArrayList<>(Arrays.asList("Wycena", "I", "II", "II+", "III", "IV", "IV+", "V-", "V", "V+", "VI", "VI+", "VI.1"));
         final ArrayList<String> kurtykiUserGrade = new ArrayList<>(Arrays.asList("Twoja wycena", "I", "II", "II+", "III", "IV", "IV", "IV+", "V-", "V", "V+", "VI", "VI+", "VI.1"));
 
+
         ArrayAdapter<String> gradeAdapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_spinner_item, kurtykiGrade);
         gradeAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         gradeSpinner.setAdapter(gradeAdapter);
@@ -54,6 +67,19 @@ public class addRouteFragment extends Fragment {
         ArrayAdapter<String> userGradeAdapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_spinner_item, kurtykiUserGrade);
         userGradeAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         userGradeSpinner.setAdapter(userGradeAdapter);
+
+
+
+//        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                requestPermissions(new String[] {
+//                        Manifest.permission.ACCESS_FINE_LOCATION,
+//                        Manifest.permission.ACCESS_COARSE_LOCATION,
+//                        Manifest.permission.INTERNET
+//                }, 10);
+//            }
+//            return root;
+//        }
 
         addButton.setOnClickListener(new View.OnClickListener() {
 
@@ -74,23 +100,19 @@ public class addRouteFragment extends Fragment {
                     return;
                 }
                 Integer userGrade = scaleConverter.String2Int("Kurtyki", userGradeSpinner.getSelectedItem().toString());
-                Location location = new Location("test");
-                location.setLongitude(0);
-                location.setLatitude(0);
                 if(routeTimeEditText.getText().toString().isEmpty()) {
                     Toast.makeText(getActivity(), "Dodaj czas przejścia!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
                 Integer routeTime = toSeconds(routeTimeEditText.getText().toString());
                 if(pitchNumberEditText.getText().toString().isEmpty()) {
                     Toast.makeText(getActivity(), "Dodaj liczbę wyciągów!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 Integer pitchNumber = Integer.parseInt(pitchNumberEditText.getText().toString());
-                routeToAdd = new Route(name, grade, location, userGrade, routeTime, pitchNumber);
-                Toast.makeText(getActivity(), routeToAdd.pprint(), Toast.LENGTH_SHORT).show();
                 context = (MainActivity) getActivity();
+                routeToAdd = new Route(name, grade, context.lastLocation, userGrade, routeTime, pitchNumber);
+                Toast.makeText(getActivity(), routeToAdd.pprint(), Toast.LENGTH_SHORT).show();
                 context.routeList.add(routeToAdd);
             }
         });

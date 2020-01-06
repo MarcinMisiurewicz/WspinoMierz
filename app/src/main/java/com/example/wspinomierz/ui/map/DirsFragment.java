@@ -23,6 +23,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.wspinomierz.MainActivity;
 import com.example.wspinomierz.R;
 import com.example.wspinomierz.ui.map.directionhelpers.FetchURL;
 import com.example.wspinomierz.ui.map.directionhelpers.TaskLoadedCallback;
@@ -60,20 +61,20 @@ public class DirsFragment extends Fragment implements OnMapReadyCallback, Direct
     private double longitudeFrom;
     private LocationManager locationManager;
     private LocationListener locationListener;
-
+    private MainActivity context;
 
     private List<Marker> originMarkers = new ArrayList<>();
     private List<Marker> destinationMarkers = new ArrayList<>();
     private List<Polyline> polylinePaths = new ArrayList<>();
     private ProgressDialog progressDialog;
-    private static final String[] INITIAL_PERMS = {
-            Manifest.permission.ACCESS_FINE_LOCATION,
-    };
-    private static final String[] LOCATION_PERMS = {
-            Manifest.permission.ACCESS_FINE_LOCATION
-    };
-    private static final int INITIAL_REQUEST = 1337;
-    private static final int LOCATION_REQUEST = INITIAL_REQUEST + 1;
+//    private static final String[] INITIAL_PERMS = {
+//            Manifest.permission.ACCESS_FINE_LOCATION,
+//    };
+//    private static final String[] LOCATION_PERMS = {
+//            Manifest.permission.ACCESS_FINE_LOCATION
+//    };
+//    private static final int INITIAL_REQUEST = 1337;
+//    private static final int LOCATION_REQUEST = INITIAL_REQUEST + 1;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -110,31 +111,31 @@ public class DirsFragment extends Fragment implements OnMapReadyCallback, Direct
 
 //        new FetchURL(getActivity()).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
 //        MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.mapFrag);
-        requestPermissions(INITIAL_PERMS, INITIAL_REQUEST);
-
-        locationManager = (LocationManager)
-                getActivity().getSystemService(LOCATION_SERVICE);
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-
-            }
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-
-            }
-        };
+//        requestPermissions(INITIAL_PERMS, INITIAL_REQUEST);
+//
+//        locationManager = (LocationManager)
+//                getActivity().getSystemService(LOCATION_SERVICE);
+//        locationListener = new LocationListener() {
+//            @Override
+//            public void onLocationChanged(Location location) {
+//
+//            }
+//
+//            @Override
+//            public void onStatusChanged(String provider, int status, Bundle extras) {
+//
+//            }
+//
+//            @Override
+//            public void onProviderEnabled(String provider) {
+//
+//            }
+//
+//            @Override
+//            public void onProviderDisabled(String provider) {
+//
+//            }
+//        };
         return root;
     }
 
@@ -146,12 +147,12 @@ public class DirsFragment extends Fragment implements OnMapReadyCallback, Direct
         map.addMarker(place2);
         map.setMyLocationEnabled(true);
 
-        requestPermissions(LOCATION_PERMS, LOCATION_REQUEST);
+//        requestPermissions(LOCATION_PERMS, LOCATION_REQUEST);
 
 
 
 
-        Criteria criteria = new Criteria();
+//        Criteria criteria = new Criteria();
 //        if (ContextCompat.checkSelfPermission( this,android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED )
 //        {
 //            ActivityCompat.requestPermissions(
@@ -171,28 +172,29 @@ public class DirsFragment extends Fragment implements OnMapReadyCallback, Direct
 //        }
 
 
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(new String[] {
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.INTERNET
-                }, 10);
-                latitudeFrom = 51.248212;
-                longitudeFrom = 19.972353;
-            }
-            return;
-        }
-//            locationManager.requestSingleUpdate("gps", locationListener);
-        locationManager.requestLocationUpdates("gps", 5000, 20, locationListener);
-//        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if (locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER))
-            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if (locationManager.isProviderEnabled( LocationManager.NETWORK_PROVIDER))
-            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        latitudeFrom = location.getLatitude();
-        longitudeFrom = location.getLongitude();
-        locationManager.removeUpdates(locationListener);
+//        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                requestPermissions(new String[] {
+//                        Manifest.permission.ACCESS_FINE_LOCATION,
+//                        Manifest.permission.ACCESS_COARSE_LOCATION,
+//                        Manifest.permission.INTERNET
+//                }, 10);
+//                latitudeFrom = 51.248212;
+//                longitudeFrom = 19.972353;
+//            }
+//            return;
+//        }
+////            locationManager.requestSingleUpdate("gps", locationListener);
+//        locationManager.requestLocationUpdates("gps", 5000, 20, locationListener);
+////        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//        if (locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER))
+//            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//        if (locationManager.isProviderEnabled( LocationManager.NETWORK_PROVIDER))
+//            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        context = (MainActivity) getActivity();
+        latitudeFrom = context.lastLocation.getLatitude();
+        longitudeFrom = context.lastLocation.getLongitude();
+//        locationManager.removeUpdates(locationListener);
 
 
         map.addPolyline(new PolylineOptions()

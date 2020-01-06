@@ -1,14 +1,25 @@
 package com.example.wspinomierz;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.provider.Settings;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -40,6 +51,10 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private View header;
 
+    private LocationManager locationManager;
+    private LocationListener locationListener;
+    public Location lastLocation;
+
     public ArrayList<Route> getRouteList() {
         return routeList;
     }
@@ -50,13 +65,48 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Location testLocation = new Location("gps");
+        testLocation.setLongitude(0);
+        testLocation.setLatitude(0);
+
         routeList = new ArrayList<Route>(
                 Arrays.asList(
-                        new Route("a", 0, new Location("gps"), 0, 1, 1),
-                        new Route("b", 1, new Location("gps"), 2, 2, 2),
-                        new Route("c", 2, new Location("gps"), 4, 3, 3)
+                        new Route("a", 0, testLocation, 0, 1, 1),
+                        new Route("b", 1, testLocation, 2, 2, 2),
+                        new Route("c", 2, testLocation, 4, 3, 3)
                 )
         );
+
+        lastLocation = new Location("gps");
+
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                lastLocation.setLongitude(location.getLongitude());
+                lastLocation.setLatitude(location.getLatitude());
+                Log.v("MAIN", "IN ON LOCATION CHANGE, lat=" + location.getLatitude() + ", lon=" + location.getLongitude());
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+                Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(i);
+            }
+        };
+
+        startLocationUpdates();
+
         mFirebaseAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_main);
         InitializeUI();
@@ -127,5 +177,29 @@ public class MainActivity extends AppCompatActivity {
         email = header.findViewById(R.id.textViewMail);
         email.setText(mFirebaseAuth.getCurrentUser().getEmail());
         prBar = findViewById(R.id.progressBar);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case 10:
+                startLocationUpdates();
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void startLocationUpdates() {
+        // first check for permissions
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.INTERNET}
+                        ,10);
+            }
+            return;
+        }
+
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
     }
 }
