@@ -59,6 +59,8 @@ public class DirsFragment extends Fragment implements OnMapReadyCallback, Direct
     private Location location;
     private double latitudeFrom;
     private double longitudeFrom;
+    public String locationTo;
+    public String locationToName;
     private LocationManager locationManager;
     private LocationListener locationListener;
     private MainActivity context;
@@ -98,15 +100,15 @@ public class DirsFragment extends Fragment implements OnMapReadyCallback, Direct
             ft.replace(R.id.mapFrag, mapFragment).commit();
         }
 
-        //TODO: tu trzeba dodać właściwe miesjca
-        place1 = new MarkerOptions()
-                .position(new LatLng(52.248212, 20.972353))
-                .title("Start");
-//                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_start_location)
-
-        place2 = new MarkerOptions()
-                .position(new LatLng(52.248808, 20.992594))
-                .title("Skała"); //TODO: finalnie tu wartoby dać nazwę skały
+//        //TODO: tu trzeba dodać właściwe miesjca
+//        place1 = new MarkerOptions()
+//                .position(new LatLng(52.248212, 20.972353))
+//                .title("Start");
+////                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_start_location)
+//
+//        place2 = new MarkerOptions()
+//                .position(new LatLng(52.248808, 20.992594))
+//                .title("Skała"); //TODO: finalnie tu wartoby dać nazwę skały
 //                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_end_location));
 
 //        new FetchURL(getActivity()).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
@@ -143,8 +145,8 @@ public class DirsFragment extends Fragment implements OnMapReadyCallback, Direct
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         map.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-        map.addMarker(place1);
-        map.addMarker(place2);
+//        map.addMarker(place1);
+//        map.addMarker(place2);
         map.setMyLocationEnabled(true);
 
 //        requestPermissions(LOCATION_PERMS, LOCATION_REQUEST);
@@ -197,19 +199,21 @@ public class DirsFragment extends Fragment implements OnMapReadyCallback, Direct
 //        locationManager.removeUpdates(locationListener);
 
 
-        map.addPolyline(new PolylineOptions()
-                .add(place1.getPosition(), place2.getPosition())
-                .width(10)
-                .color(Color.RED)
-        );
+//        map.addPolyline(new PolylineOptions()
+//                .add(place1.getPosition(), place2.getPosition())
+//                .width(10)
+//                .color(Color.RED)
+//        );
 
         String origin = Double.toString(latitudeFrom) + ',' + Double.toString(longitudeFrom);
 //        String origin = "Warsaw";
-        String destination = "Berlin";
-        try {
-            new DirectionFinder(this, origin, destination, getString(R.string.google_maps_secret_key)).execute();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+        String destination = locationTo;
+        if (destination != null) {
+            try {
+                new DirectionFinder(this, origin, destination, getString(R.string.google_maps_secret_key)).execute();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
 
     }
@@ -272,10 +276,16 @@ public class DirsFragment extends Fragment implements OnMapReadyCallback, Direct
 //            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
             originMarkers.add(map.addMarker(new MarkerOptions()
                     .title(route.startAddress)
-                    .position(route.startLocation)));
+                    .position(route.startLocation)
+//                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_start_location))
+            ));
+
             destinationMarkers.add(map.addMarker(new MarkerOptions()
-                    .title(route.endAddress)
-                    .position(route.endLocation)));
+//                    .title(route.endAddress)
+                    .title(locationToName)
+                    .position(route.endLocation)
+//                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_end_location))
+            ));
 
             PolylineOptions polylineOptions = new PolylineOptions().
                     geodesic(true).
