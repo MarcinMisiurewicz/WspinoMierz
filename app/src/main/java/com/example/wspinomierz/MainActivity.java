@@ -27,6 +27,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.Gson;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -39,6 +40,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -79,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 )
         );
 
+
         pastRouteList = new ArrayList<Route>();
         Route r1 = new Route("a", 0, testLocation, 0);
         r1.setRouteTime(1);
@@ -88,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
         r2.setUserGrade(2);
         pastRouteList.add(r1);
         pastRouteList.add(r2);
+
+//        String json = new Gson().toJson(pastRouteList);
 
         lastLocation = new Location("gps");
 
