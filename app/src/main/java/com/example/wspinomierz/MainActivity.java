@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public ArrayList<Route> routeList;
+    public ArrayList<Route> pastRouteList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +73,21 @@ public class MainActivity extends AppCompatActivity {
 
         routeList = new ArrayList<Route>(
                 Arrays.asList(
-                        new Route("a", 0, testLocation, 0, 1, 1),
-                        new Route("b", 1, testLocation, 2, 2, 2),
-                        new Route("c", 2, testLocation, 4, 3, 3)
+                        new Route("a", 0, testLocation, 0),
+                        new Route("b", 1, testLocation, 2),
+                        new Route("c", 2, testLocation, 4)
                 )
         );
+
+        pastRouteList = new ArrayList<Route>();
+        Route r1 = new Route("a", 0, testLocation, 0);
+        r1.setRouteTime(1);
+        r1.setUserGrade(2);
+        Route r2 = new Route("a", 0, testLocation, 0);
+        r2.setRouteTime(1);
+        r2.setUserGrade(2);
+        pastRouteList.add(r1);
+        pastRouteList.add(r2);
 
         lastLocation = new Location("gps");
 

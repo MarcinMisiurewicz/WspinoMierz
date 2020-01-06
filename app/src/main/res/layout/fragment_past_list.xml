@@ -7,7 +7,7 @@
 
 
     <LinearLayout
-        android:id="@+id/linearLayout3"
+        android:id="@+id/pastLinearLayout3"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textViewName"
+            android:id="@+id/pastTextViewNameLabel"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_weight="15"
@@ -28,7 +28,7 @@
             android:textAlignment="center" />
 
         <TextView
-            android:id="@+id/textViewGrade"
+            android:id="@+id/pastTextViewGradeLabel"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_weight="5"
@@ -36,7 +36,7 @@
             android:textAlignment="center" />
 
         <TextView
-            android:id="@+id/textViewPitchNumber"
+            android:id="@+id/pastTextViewPitchNumberLabel"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_weight="5"
@@ -44,10 +44,28 @@
             android:text="Wyciągi"
             android:textAlignment="center" />
 
+        <TextView
+            android:id="@+id/pastTextViewUserGradeLabel"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="5"
+            android:gravity="center"
+            android:text="Twoja wycena"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/pastTextViewRouteTimeLabel"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="5"
+            android:gravity="center"
+            android:text="Czas"
+            android:textAlignment="center" />
+
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/pastFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
@@ -59,7 +77,7 @@
         app:srcCompat="@drawable/ic_addroute" />
 
     <ListView
-        android:id="@+id/listView"
+        android:id="@+id/pastListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -70,5 +88,5 @@
         android:text="Przelicz"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+        app:layout_constraintTop_toBottomOf="@+id/pastLinearLayout3" />
 </androidx.constraintlayout.widget.ConstraintLayout>

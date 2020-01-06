@@ -25,9 +25,9 @@
 
     <fragment
         android:id="@+id/nav_statistics"
-        android:name="com.example.wspinomierz.ui.statistics.StatisticsFragment"
-        android:label="@string/menu_statistics"
-        tools:layout="@layout/fragment_statistics" />
+        android:name="com.example.wspinomierz.ui.pastList.PastListFragment"
+        android:label="@string/menu_pastList"
+        tools:layout="@layout/fragment_pastList" />
 
     <fragment
         android:id="@+id/nav_map"

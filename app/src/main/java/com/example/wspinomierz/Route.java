@@ -10,13 +10,19 @@ public class Route {
     private Integer routeTime;
     private Integer pitchNumber;
 
-    public Route(String n, Integer g, Location l, Integer u, Integer r, Integer p) {
+    public Route(String n, Integer g, Location l, Integer p) {
         name = n;
         grade = g;
         location = l;
-        userGrade = u;
-        routeTime = r;
         pitchNumber = p;
+    }
+
+    public void setUserGrade(Integer userGrade) {
+        this.userGrade = userGrade;
+    }
+
+    public void setRouteTime(Integer routeTime) {
+        this.routeTime = routeTime;
     }
 
     public String getName() {
