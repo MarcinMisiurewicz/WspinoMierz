@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textViewName"
+            android:id="@+id/textViewNameLabel"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_weight="15"
@@ -28,7 +28,7 @@
             android:textAlignment="center" />
 
         <TextView
-            android:id="@+id/textViewGrade"
+            android:id="@+id/textViewGradeLabel"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_weight="5"
@@ -36,7 +36,7 @@
             android:textAlignment="center" />
 
         <TextView
-            android:id="@+id/textViewPitchNumber"
+            android:id="@+id/textViewPitchNumberLabel"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_weight="5"

@@ -31,6 +31,8 @@ import com.example.wspinomierz.ui.map.DirsFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ListFragment extends Fragment {
 
@@ -43,6 +45,9 @@ public class ListFragment extends Fragment {
                 ViewModelProviders.of(this).get(ListViewModel.class);
         View root = inflater.inflate(R.layout.fragment_list, container, false);
         final ListView listView = root.findViewById(R.id.listView);
+        final TextView textViewNameLabel = root.findViewById((R.id.textViewNameLabel));
+        final TextView textViewGradeLabel = root.findViewById((R.id.textViewGradeLabel));
+        final TextView textViewPitchNumberLabel = root.findViewById((R.id.textViewPitchNumberLabel));
 //        final TextView textView = root.findViewById(R.id.text_list);
 //        listViewModel.getText().observe(this, new Observer<String>() {
 //            @Override
@@ -52,7 +57,7 @@ public class ListFragment extends Fragment {
 //        });
 
         context = (MainActivity) getActivity();
-        RouteArrayAdapter adapter = new RouteArrayAdapter(context, R.layout.route_list_adapter_layout, context.routeList);
+        final RouteArrayAdapter adapter = new RouteArrayAdapter(context, R.layout.route_list_adapter_layout, context.routeList);
         listView.setAdapter(adapter);
 
         FloatingActionButton addButton = root.findViewById(R.id.fab);
@@ -83,6 +88,48 @@ public class ListFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
+        textViewNameLabel.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View root) {
+                Collections.sort(context.routeList, new Comparator<Route>() {
+                    @Override
+                    public int compare(Route r1, Route r2) {
+                        return r1.getName().compareTo(r2.getName());
+                    }
+                });
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        textViewGradeLabel.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View root) {
+                Collections.sort(context.routeList, new Comparator<Route>() {
+                    @Override
+                    public int compare(Route r1, Route r2) {
+                        return r1.getGrade().compareTo(r2.getGrade());
+                    }
+                });
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        textViewPitchNumberLabel.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View root) {
+                Collections.sort(context.routeList, new Comparator<Route>() {
+                    @Override
+                    public int compare(Route r1, Route r2) {
+                        return r1.getPitchNumber().compareTo(r2.getPitchNumber());
+                    }
+                });
+                adapter.notifyDataSetChanged();
+            }
+        });
+
         return root;
     }
 }

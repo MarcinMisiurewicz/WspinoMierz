@@ -25,6 +25,7 @@
             android:layout_height="60dp"
             android:layout_weight="15"
             android:text="Nazwa Drogi"
+            android:clickable="false"
             android:textAlignment="center" />
 
         <TextView
@@ -33,15 +34,7 @@
             android:layout_height="60dp"
             android:layout_weight="5"
             android:text="Wycena"
-            android:textAlignment="center" />
-
-        <TextView
-            android:id="@+id/pastTextViewPitchNumberLabel"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_weight="5"
-            android:gravity="center"
-            android:text="Wyciągi"
+            android:clickable="false"
             android:textAlignment="center" />
 
         <TextView
@@ -51,6 +44,17 @@
             android:layout_weight="5"
             android:gravity="center"
             android:text="Twoja wycena"
+            android:clickable="false"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/pastTextViewPitchNumberLabel"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="5"
+            android:gravity="center"
+            android:text="Wyciągi"
+            android:clickable="false"
             android:textAlignment="center" />
 
         <TextView
@@ -59,6 +63,7 @@
             android:layout_height="60dp"
             android:layout_weight="5"
             android:gravity="center"
+            android:clickable="false"
             android:text="Czas"
             android:textAlignment="center" />
 
