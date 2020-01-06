@@ -37,26 +37,20 @@ public class RouteArrayAdapter extends ArrayAdapter<Route> {
         String name = getItem(position).getName();
         Integer grade = getItem(position).getGrade();
         Location location = getItem(position).getLocation();
-        Integer userGrade = getItem(position).getUserGrade();
-        Integer routeTime = getItem(position).getRouteTime();
         Integer pitchNumber = getItem(position).getPitchNumber();
 
-        Route route = new Route(name, grade, location, userGrade, routeTime, pitchNumber);
+//        Route route = new Route(name, grade, location, userGrade, routeTime, pitchNumber);
 
         LayoutInflater inflater = LayoutInflater.from(context);
         convertView = inflater.inflate(resource, parent, false);
 
         TextView tvName = convertView.findViewById(R.id.textViewName);
         TextView tvGrade = convertView.findViewById(R.id.textViewGrade);
-        TextView tvUserGrade = convertView.findViewById(R.id.textViewUserGrade);
-        TextView tvRouteTime = convertView.findViewById(R.id.textViewRouteTime);
         TextView tvPitchNumber = convertView.findViewById(R.id.textViewPitchNumber);
         TextView tvLocation = convertView.findViewById(R.id.textViewLocation);
 
         tvName.setText(name);
         tvGrade.setText(scaleConverter.Int2String("Kurtyki", grade));
-        tvUserGrade.setText(scaleConverter.Int2String("Kurtyki", userGrade));
-        tvRouteTime.setText(routeTime.toString());
         tvPitchNumber.setText(pitchNumber.toString());
         tvLocation.setText(location.getLatitude() + "," + location.getLongitude());
         return convertView;

@@ -31,8 +31,8 @@ public class PastListFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         pastListViewModel =
                 ViewModelProviders.of(this).get(PastListViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_list, container, false);
-        final ListView listView = root.findViewById(R.id.listView);
+        View root = inflater.inflate(R.layout.fragment_past_list, container, false);
+        final ListView listView = root.findViewById(R.id.pastListView);
 //        final TextView textView = root.findViewById(R.id.text_list);
 //        listViewModel.getText().observe(this, new Observer<String>() {
 //            @Override
@@ -42,10 +42,10 @@ public class PastListFragment extends Fragment {
 //        });
 
         context = (MainActivity) getActivity();
-        RouteArrayAdapter adapter = new RouteArrayAdapter(context, R.layout.route_list_adapter_layout, context.pastRouteList);
+        PastRouteArrayAdapter adapter = new PastRouteArrayAdapter(context, R.layout.past_route_list_adapter_layout, context.pastRouteList);
         listView.setAdapter(adapter);
 
-        FloatingActionButton addButton = root.findViewById(R.id.fab);
+        FloatingActionButton addButton = root.findViewById(R.id.pastFab);
         addButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -62,8 +62,8 @@ public class PastListFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                TextView tvName = v.findViewById(R.id.textViewName);
-                TextView tvLoc = v.findViewById(R.id.textViewLocation);
+                TextView tvName = v.findViewById(R.id.pastTextViewName);
+                TextView tvLoc = v.findViewById(R.id.pastTextViewLocation);
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 DirsFragment NAME = new DirsFragment();

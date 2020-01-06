@@ -36,22 +36,6 @@
             android:textAlignment="center" />
 
         <TextView
-            android:id="@+id/textViewUserGrade"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_weight="5"
-            android:text="Twoja wycena"
-            android:textAlignment="center" />
-
-        <TextView
-            android:id="@+id/textViewRouteTime"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_weight="5"
-            android:text="Czas"
-            android:textAlignment="center" />
-
-        <TextView
             android:id="@+id/textViewPitchNumber"
             android:layout_width="0dp"
             android:layout_height="60dp"

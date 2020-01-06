@@ -41,17 +41,17 @@ public class PastRouteArrayAdapter extends ArrayAdapter<Route> {
         Integer routeTime = getItem(position).getRouteTime();
         Integer pitchNumber = getItem(position).getPitchNumber();
 
-        Route route = new Route(name, grade, location, userGrade, routeTime, pitchNumber);
+//        Route route = new Route(name, grade, location, userGrade, routeTime, pitchNumber);
 
         LayoutInflater inflater = LayoutInflater.from(context);
         convertView = inflater.inflate(resource, parent, false);
 
-        TextView tvName = convertView.findViewById(R.id.textViewName);
-        TextView tvGrade = convertView.findViewById(R.id.textViewGrade);
-        TextView tvUserGrade = convertView.findViewById(R.id.textViewUserGrade);
-        TextView tvRouteTime = convertView.findViewById(R.id.textViewRouteTime);
-        TextView tvPitchNumber = convertView.findViewById(R.id.textViewPitchNumber);
-        TextView tvLocation = convertView.findViewById(R.id.textViewLocation);
+        TextView tvName = convertView.findViewById(R.id.pastTextViewName);
+        TextView tvGrade = convertView.findViewById(R.id.pastTextViewGrade);
+        TextView tvUserGrade = convertView.findViewById(R.id.pastTextViewUserGrade);
+        TextView tvRouteTime = convertView.findViewById(R.id.pastTextViewRouteTime);
+        TextView tvPitchNumber = convertView.findViewById(R.id.pastTextViewPitchNumber);
+        TextView tvLocation = convertView.findViewById(R.id.pastTextViewLocation);
 
         tvName.setText(name);
         tvGrade.setText(scaleConverter.Int2String("Kurtyki", grade));

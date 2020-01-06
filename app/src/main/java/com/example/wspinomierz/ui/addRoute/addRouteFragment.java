@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -39,6 +40,7 @@ public class addRouteFragment extends Fragment {
     private com.example.wspinomierz.ui.addRoute.addRouteViewModel addRouteViewModel;
     private Route routeToAdd;
     private MainActivity context;
+    private boolean ifPast;
 
 
 
@@ -55,6 +57,7 @@ public class addRouteFragment extends Fragment {
         final EditText routeTimeEditText = root.findViewById(R.id.routeTime);
         final EditText pitchNumberEditText = root.findViewById(R.id.pitchNumber);
         final Button addButton = root.findViewById(R.id.addButton);
+        final Switch pastSwitch = root.findViewById(R.id.switchPast);
 
         final ArrayList<String> kurtykiGrade = new ArrayList<>(Arrays.asList("Wycena", "I", "II", "II+", "III", "IV", "IV+", "V-", "V", "V+", "VI", "VI+", "VI.1"));
         final ArrayList<String> kurtykiUserGrade = new ArrayList<>(Arrays.asList("Twoja wycena", "I", "II", "II+", "III", "IV", "IV", "IV+", "V-", "V", "V+", "VI", "VI+", "VI.1"));
@@ -81,10 +84,25 @@ public class addRouteFragment extends Fragment {
 //            return root;
 //        }
 
+        pastSwitch.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (pastSwitch.isChecked()) {
+                    routeTimeEditText.setVisibility(View.VISIBLE);
+                    userGradeSpinner.setVisibility(View.VISIBLE);
+                } else {
+                    routeTimeEditText.setVisibility(View.INVISIBLE);
+                    userGradeSpinner.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
         addButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View root) {
+                context = (MainActivity) getActivity();
+
                 if(routeNameEditText.getText().toString().isEmpty()) {
                     Toast.makeText(getActivity(), "Dodaj nazwę!", Toast.LENGTH_SHORT).show();
                     return;
@@ -95,25 +113,31 @@ public class addRouteFragment extends Fragment {
                     return;
                 }
                 Integer grade = scaleConverter.String2Int("Kurtyki", gradeSpinner.getSelectedItem().toString());
-                if(userGradeSpinner.getSelectedItemPosition() == 0) {
-                    Toast.makeText(getActivity(), "Dodaj swoją wycenę!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                Integer userGrade = scaleConverter.String2Int("Kurtyki", userGradeSpinner.getSelectedItem().toString());
-                if(routeTimeEditText.getText().toString().isEmpty()) {
-                    Toast.makeText(getActivity(), "Dodaj czas przejścia!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                Integer routeTime = toSeconds(routeTimeEditText.getText().toString());
+
                 if(pitchNumberEditText.getText().toString().isEmpty()) {
                     Toast.makeText(getActivity(), "Dodaj liczbę wyciągów!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 Integer pitchNumber = Integer.parseInt(pitchNumberEditText.getText().toString());
-                context = (MainActivity) getActivity();
-                routeToAdd = new Route(name, grade, context.lastLocation, userGrade, routeTime, pitchNumber);
+                routeToAdd = new Route(name, grade, context.lastLocation, pitchNumber);
+                if (pastSwitch.isChecked()) {
+                    if(userGradeSpinner.getSelectedItemPosition() == 0) {
+                        Toast.makeText(getActivity(), "Dodaj swoją wycenę!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    Integer userGrade = scaleConverter.String2Int("Kurtyki", userGradeSpinner.getSelectedItem().toString());
+                    if(routeTimeEditText.getText().toString().isEmpty()) {
+                        Toast.makeText(getActivity(), "Dodaj czas przejścia!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    Integer routeTime = toSeconds(routeTimeEditText.getText().toString());
+                    routeToAdd.setUserGrade(userGrade);
+                    routeToAdd.setRouteTime(routeTime);
+                    context.pastRouteList.add(routeToAdd);
+                } else {
+                    context.routeList.add(routeToAdd);
+                }
                 Toast.makeText(getActivity(), routeToAdd.pprint(), Toast.LENGTH_SHORT).show();
-                context.routeList.add(routeToAdd);
             }
         });
 //        addRouteViewModel.getText().observe(this, new Observer<String>() {
