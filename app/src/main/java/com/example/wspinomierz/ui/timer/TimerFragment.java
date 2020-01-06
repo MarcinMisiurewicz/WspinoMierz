@@ -33,13 +33,13 @@ public class TimerFragment extends Fragment {
         timerViewModel =
                 ViewModelProviders.of(this).get(TimerViewModel.class);
         View root = inflater.inflate(R.layout.fragment_timer, container, false);
-        final TextView textView = root.findViewById(R.id.text_timer);
-        timerViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+//        final TextView textView = root.findViewById(R.id.text_timer);
+//        timerViewModel.getText().observe(this, new Observer<String>() {
+//            @Override
+//            public void onChanged(@Nullable String s) {
+//                textView.setText(s);
+//            }
+//        });
         chronometer = root.findViewById(R.id.chronometer);
         startButton = root.findViewById(R.id.start_button);
         pauseButton = root.findViewById(R.id.pause_button);
