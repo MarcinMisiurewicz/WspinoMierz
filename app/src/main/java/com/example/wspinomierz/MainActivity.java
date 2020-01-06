@@ -66,8 +66,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Location testLocation = new Location("gps");
-        testLocation.setLongitude(52.011074);
-        testLocation.setLatitude(22.804611);
+        testLocation.setLatitude(52.011074);
+        testLocation.setLongitude(22.804611);
+
 
         routeList = new ArrayList<Route>(
                 Arrays.asList(
