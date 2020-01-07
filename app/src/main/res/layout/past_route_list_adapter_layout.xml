@@ -37,15 +37,6 @@
         android:textAlignment="center" />
 
     <TextView
-        android:id="@+id/pastTextViewRouteTime"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_weight="5"
-        android:clickable="false"
-        android:text="textViewRouteTime"
-        android:textAlignment="center" />
-
-    <TextView
         android:id="@+id/pastTextViewPitchNumber"
         android:layout_width="0dp"
         android:layout_height="60dp"
@@ -53,6 +44,15 @@
         android:clickable="false"
         android:gravity="center"
         android:text="textViewPitchNumber"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/pastTextViewRouteTime"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_weight="5"
+        android:clickable="false"
+        android:text="textViewRouteTime"
         android:textAlignment="center" />
 
     <TextView
