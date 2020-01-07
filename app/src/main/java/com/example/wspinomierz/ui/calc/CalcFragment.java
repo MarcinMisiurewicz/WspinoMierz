@@ -200,7 +200,7 @@ public class CalcFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onClick(View root) {
-                Toast.makeText(getActivity(),"przliczam",Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(),"przliczam",Toast.LENGTH_SHORT).show();
                 String scaleInString = scaleConverter.String2String(choosen_scale_from, choosen_scale_to, choosen_grade_from);
                 resultGradeTextView.setText(scaleInString);
             }
@@ -211,7 +211,7 @@ public class CalcFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onClick(View root) {
-                Toast.makeText(getActivity(),"aaa",Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(),"aaa",Toast.LENGTH_SHORT).show();
                 //TODO: zrobić przerzucenien skal prawo-lewo
                 Integer old_right_selection = scaleSpinner2.getSelectedItemPosition();
                 Integer old_left_selection = scaleSpinner1.getSelectedItemPosition();
@@ -242,7 +242,7 @@ public class CalcFragment extends Fragment implements View.OnClickListener {
                         if (choosen_scale_to != null) {
                             choosen_grade_from = gradeSpinner1.getSelectedItem().toString();
                         }
-                        Toast.makeText(getActivity(), "wybrano " + item.toString(),Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(), "wybrano " + item.toString(),Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -258,7 +258,7 @@ public class CalcFragment extends Fragment implements View.OnClickListener {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         Object item = parent.getItemAtPosition(position);
                         choosen_scale_to = item.toString();
-                        Toast.makeText(getActivity(), "wybrano " + item.toString(),Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(), "wybrano " + item.toString(),Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -274,12 +274,12 @@ public class CalcFragment extends Fragment implements View.OnClickListener {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         Object item = parent.getItemAtPosition(position);
                         choosen_grade_from = item.toString();
-                        Toast.makeText(getActivity(), "wybrano " + item.toString(),Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(), "wybrano " + item.toString(),Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
-                        Toast.makeText(getActivity(), "bbbb",Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getActivity(), "bbbb",Toast.LENGTH_LONG).show();
                     }
                 }
         );
