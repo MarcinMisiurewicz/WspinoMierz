@@ -18,7 +18,7 @@
 
     <TextView
         android:id="@+id/textViewMeanText"
-        android:layout_width="140dp"
+        android:layout_width="170dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -40,7 +40,7 @@
 
     <TextView
         android:id="@+id/textViewMaxText"
-        android:layout_width="140dp"
+        android:layout_width="170dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -62,7 +62,7 @@
 
     <TextView
         android:id="@+id/textViewCountText"
-        android:layout_width="140dp"
+        android:layout_width="170dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -81,5 +81,49 @@
         android:textSize="24sp"
         app:layout_constraintStart_toEndOf="@+id/textViewCountText"
         app:layout_constraintTop_toBottomOf="@+id/textViewMaxValue" />
+
+    <TextView
+        android:id="@+id/textViewCountTimeText"
+        android:layout_width="170dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Czas w ścianie:"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCountText" />
+
+    <TextView
+        android:id="@+id/textViewCountTimeValue"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Value"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/textViewCountTimeText"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCountValue" />
+
+    <TextView
+        android:id="@+id/textViewCountPitchText"
+        android:layout_width="170dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Liczba wyciągów:"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCountTimeText" />
+
+    <TextView
+        android:id="@+id/textViewCountPitchValue"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Value"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/textViewCountPitchText"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCountTimeValue" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

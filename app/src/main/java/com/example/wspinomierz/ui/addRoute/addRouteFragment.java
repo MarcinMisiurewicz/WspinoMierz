@@ -158,7 +158,7 @@ public class addRouteFragment extends Fragment {
                     routeToAdd = new Route(name, grade, futureLocation, pitchNumber);
                     context.routeList.add(routeToAdd);
                 }
-                Toast.makeText(getActivity(), routeToAdd.pprint(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), routeToAdd.pprint(), Toast.LENGTH_SHORT).show();
             }
         });
 //        addRouteViewModel.getText().observe(this, new Observer<String>() {
