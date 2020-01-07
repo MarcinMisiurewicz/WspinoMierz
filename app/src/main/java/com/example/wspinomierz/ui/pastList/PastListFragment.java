@@ -196,7 +196,7 @@ public class PastListFragment extends Fragment {
         try {
             fos = getActivity().openFileOutput(filename, Context.MODE_PRIVATE);
             fos.write(serializedRouteList.getBytes());
-            Toast.makeText(getActivity(), "Saved to file " + getActivity().getFilesDir() + "/" + filename, Toast.LENGTH_LONG).show();
+//            Toast.makeText(getActivity(), "Saved to file " + getActivity().getFilesDir() + "/" + filename, Toast.LENGTH_LONG).show();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -209,10 +209,6 @@ public class PastListFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
-        }
-        File file = new File(filename);
-        if (file.exists()){
-            Toast.makeText(getActivity(), "file exists", Toast.LENGTH_LONG).show();
         }
     }
 }
