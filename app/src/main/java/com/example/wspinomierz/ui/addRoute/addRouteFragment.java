@@ -57,11 +57,12 @@ public class addRouteFragment extends Fragment {
         final Spinner userGradeSpinner = root.findViewById(R.id.userGrade);
         final EditText routeTimeEditText = root.findViewById(R.id.routeTime);
         final EditText pitchNumberEditText = root.findViewById(R.id.pitchNumber);
+        final EditText routeLocationEditText = root.findViewById(R.id.routeLocation);
         final Button addButton = root.findViewById(R.id.addButton);
         final Switch pastSwitch = root.findViewById(R.id.switchPast);
 
         final ArrayList<String> kurtykiGrade = new ArrayList<>(Arrays.asList("Wycena", "I", "II", "II+", "III", "IV", "IV+", "V-", "V", "V+", "VI", "VI+", "VI.1"));
-        final ArrayList<String> kurtykiUserGrade = new ArrayList<>(Arrays.asList("Twoja wycena", "I", "II", "II+", "III", "IV", "IV", "IV+", "V-", "V", "V+", "VI", "VI+", "VI.1"));
+        final ArrayList<String> kurtykiUserGrade = new ArrayList<>(Arrays.asList("Twoja wycena", "I", "II", "II+", "III", "IV", "IV+", "V-", "V", "V+", "VI", "VI+", "VI.1"));
 
 
         ArrayAdapter<String> gradeAdapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_spinner_item, kurtykiGrade);
@@ -92,9 +93,12 @@ public class addRouteFragment extends Fragment {
                 if (pastSwitch.isChecked()) {
                     routeTimeEditText.setVisibility(View.VISIBLE);
                     userGradeSpinner.setVisibility(View.VISIBLE);
+                    routeLocationEditText.setVisibility(View.INVISIBLE);
+
                 } else {
                     routeTimeEditText.setVisibility(View.INVISIBLE);
                     userGradeSpinner.setVisibility(View.INVISIBLE);
+                    routeLocationEditText.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -120,7 +124,7 @@ public class addRouteFragment extends Fragment {
                     return;
                 }
                 Integer pitchNumber = Integer.parseInt(pitchNumberEditText.getText().toString());
-                routeToAdd = new Route(name, grade, context.lastLocation, pitchNumber);
+
                 if (pastSwitch.isChecked()) {
                     if(userGradeSpinner.getSelectedItemPosition() == 0) {
                         Toast.makeText(getActivity(), "Dodaj swoją wycenę!", Toast.LENGTH_SHORT).show();
@@ -132,10 +136,26 @@ public class addRouteFragment extends Fragment {
                         return;
                     }
                     Integer routeTime = toSeconds(routeTimeEditText.getText().toString());
+                    routeToAdd = new Route(name, grade, context.lastLocation, pitchNumber);
                     routeToAdd.setUserGrade(userGrade);
                     routeToAdd.setRouteTime(routeTime);
                     context.pastRouteList.add(routeToAdd);
                 } else {
+                    if(routeLocationEditText.getText().toString().isEmpty()) {
+                        Toast.makeText(getActivity(), "Dodaj lokalizację!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if(!validateLocation(routeLocationEditText.getText().toString())) {
+                        Toast.makeText(getActivity(), "lokalizacja nieprawidłowa", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    String routeLocation = routeLocationEditText.getText().toString();
+                    routeLocation.replace(" ", "");
+                    String[] parts = routeLocation.split(",");
+                    Location futureLocation = new Location("gps");
+                    futureLocation.setLatitude(Double.parseDouble(parts[0]));
+                    futureLocation.setLongitude(Double.parseDouble(parts[1]));
+                    routeToAdd = new Route(name, grade, futureLocation, pitchNumber);
                     context.routeList.add(routeToAdd);
                 }
                 Toast.makeText(getActivity(), routeToAdd.pprint(), Toast.LENGTH_SHORT).show();
@@ -159,5 +179,22 @@ public class addRouteFragment extends Fragment {
             return secsInMins + mins;
         }
         return Integer.parseInt(s);
+    }
+
+    private static boolean validateLocation(String s) {
+        char[] okChars = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '.', ' '};
+        outer : for (int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i);
+            for (int j = 0; j < okChars.length; j++) {
+                if (okChars[j] == ch) {
+                    continue outer;
+                }
+            }
+            return false;
+        }
+        if (s.length() < 3) {
+            return false;
+        }
+        return true;
     }
 }
