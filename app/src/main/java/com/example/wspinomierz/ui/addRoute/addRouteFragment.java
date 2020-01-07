@@ -1,14 +1,8 @@
 package com.example.wspinomierz.ui.addRoute;
 
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.content.Context;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +12,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
+import com.google.gson.Gson;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -29,11 +23,12 @@ import com.example.wspinomierz.R;
 import com.example.wspinomierz.Route;
 import com.example.wspinomierz.ScaleConverter;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-
-import static android.content.Context.LOCATION_SERVICE;
 
 //TODO: zrobić pole z dodawaniem location dla dróg planowanych
 public class addRouteFragment extends Fragment {
@@ -140,6 +135,7 @@ public class addRouteFragment extends Fragment {
                     routeToAdd.setUserGrade(userGrade);
                     routeToAdd.setRouteTime(routeTime);
                     context.pastRouteList.add(routeToAdd);
+                    saveToFile(root, context.FILE_NAME_PAST_LIST, context.pastRouteList);
                 } else {
                     if(routeLocationEditText.getText().toString().isEmpty()) {
                         Toast.makeText(getActivity(), "Dodaj lokalizację!", Toast.LENGTH_SHORT).show();
@@ -157,6 +153,8 @@ public class addRouteFragment extends Fragment {
                     futureLocation.setLongitude(Double.parseDouble(parts[1]));
                     routeToAdd = new Route(name, grade, futureLocation, pitchNumber);
                     context.routeList.add(routeToAdd);
+                    saveToFile(root, context.FILE_NAME_LIST, context.routeList);
+
                 }
 //                Toast.makeText(getActivity(), routeToAdd.pprint(), Toast.LENGTH_SHORT).show();
             }
@@ -196,5 +194,28 @@ public class addRouteFragment extends Fragment {
             return false;
         }
         return true;
+    }
+
+    private void saveToFile(View v, String filename, ArrayList<Route> routeList) {
+        String serializedRouteList = new Gson().toJson(routeList);
+        FileOutputStream fos = null;
+
+        try {
+            fos = getActivity().openFileOutput(filename, Context.MODE_PRIVATE);
+            fos.write(serializedRouteList.getBytes());
+            Toast.makeText(getActivity(), "Dodano Drogę", Toast.LENGTH_LONG).show();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

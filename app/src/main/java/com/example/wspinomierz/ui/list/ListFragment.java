@@ -1,6 +1,9 @@
 package com.example.wspinomierz.ui.list;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,7 +32,12 @@ import com.example.wspinomierz.Route;
 import com.example.wspinomierz.ui.addRoute.addRouteFragment;
 import com.example.wspinomierz.ui.map.DirsFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -38,9 +46,11 @@ public class ListFragment extends Fragment {
 
     public MainActivity context;
     private ListViewModel listViewModel;
+//    private int positionToDel;
+//    private RouteArrayAdapter adapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+                             final ViewGroup container, Bundle savedInstanceState) {
         listViewModel =
                 ViewModelProviders.of(this).get(ListViewModel.class);
         View root = inflater.inflate(R.layout.fragment_list, container, false);
@@ -88,6 +98,32 @@ public class ListFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Uwaga")
+                        .setMessage("Czy na pewno chcesz usunąć przejście?")
+                        .setPositiveButton("pozostaw", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .setNegativeButton("usuń", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                context.routeList.remove(position);
+                                adapter.notifyDataSetChanged();
+                                saveToFile(context.FILE_NAME_LIST, context.routeList);
+                            }
+                        });
+                builder.show();
+                return true;
+            }
+        });
+
         textViewNameLabel.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -132,4 +168,29 @@ public class ListFragment extends Fragment {
 
         return root;
     }
+
+    private void saveToFile(String filename, ArrayList<Route> routeList) {
+        String serializedRouteList = new Gson().toJson(routeList);
+        FileOutputStream fos = null;
+
+        try {
+            fos = getActivity().openFileOutput(filename, Context.MODE_PRIVATE);
+            fos.write(serializedRouteList.getBytes());
+//            Toast.makeText(getActivity(), "Saved to file " + getActivity().getFilesDir() + "/" + filename, Toast.LENGTH_LONG).show();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+
 }

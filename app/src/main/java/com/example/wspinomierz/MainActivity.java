@@ -9,9 +9,6 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
@@ -19,7 +16,6 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -28,6 +24,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -38,8 +35,14 @@ import android.view.Menu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -52,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private View header;
+    public static final String FILE_NAME_LIST = "routesList.txt";
+    public static final String FILE_NAME_PAST_LIST = "pastRoutesList.txt";
 
     private LocationManager locationManager;
     private LocationListener locationListener;
@@ -72,25 +77,34 @@ public class MainActivity extends AppCompatActivity {
         testLocation.setLatitude(52.011074);
         testLocation.setLongitude(22.804611);
 
+        String dir = getFilesDir().getAbsolutePath();
+        File fileList = new File(dir + "/" + FILE_NAME_LIST);
+        if(fileList.exists()) {
+            routeList = loadFromFile(FILE_NAME_LIST);
+        } else {
+            routeList = new ArrayList<Route>(
+//                    Arrays.asList(
+//                            new Route("a", 0, testLocation, 0),
+//                            new Route("b", 1, testLocation, 2),
+//                            new Route("c", 2, testLocation, 4)
+//                    )
+            );
+        }
+        File filePastList = new File(dir + "/" + FILE_NAME_LIST);
+        if(filePastList.exists()) {
+            pastRouteList = loadFromFile(FILE_NAME_PAST_LIST);
+        } else {
+            pastRouteList = new ArrayList<Route>();
+//            Route r1 = new Route("a", 0, testLocation, 0);
+//            r1.setRouteTime(1);
+//            r1.setUserGrade(2);
+//            Route r2 = new Route("a", 0, testLocation, 0);
+//            r2.setRouteTime(1);
+//            r2.setUserGrade(2);
+//            pastRouteList.add(r1);
+//            pastRouteList.add(r2);
+        }
 
-        routeList = new ArrayList<Route>(
-                Arrays.asList(
-                        new Route("a", 0, testLocation, 0),
-                        new Route("b", 1, testLocation, 2),
-                        new Route("c", 2, testLocation, 4)
-                )
-        );
-
-
-        pastRouteList = new ArrayList<Route>();
-        Route r1 = new Route("a", 0, testLocation, 0);
-        r1.setRouteTime(1);
-        r1.setUserGrade(2);
-        Route r2 = new Route("a", 0, testLocation, 0);
-        r2.setRouteTime(1);
-        r2.setUserGrade(2);
-        pastRouteList.add(r1);
-        pastRouteList.add(r2);
 
 //        String json = new Gson().toJson(pastRouteList);
 
@@ -218,5 +232,42 @@ public class MainActivity extends AppCompatActivity {
         }
 
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+    }
+
+    public ArrayList<Route> loadFromFile(String filename) {
+        ArrayList<Route> routeListToLoad = new ArrayList<Route>();
+        FileInputStream fis = null;
+        try {
+            fis = openFileInput(filename);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
+            String text;
+
+            while ((text = br.readLine()) != null) {
+                sb.append(text).append("\n");
+            }
+
+            routeListToLoad = deserializeRouteList(sb.toString());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return routeListToLoad;
+    }
+
+    public ArrayList<Route> deserializeRouteList(String s) {
+        Gson gson = new Gson();
+        Type listType = new TypeToken<ArrayList<Route>>(){}.getType();
+        return gson.fromJson(s, listType);
     }
 }

@@ -39,29 +39,39 @@ public class HomeFragment extends Fragment {
 //            }
 //        });
         context = (MainActivity) getActivity();
-        int allValues = 0;
-        int maxGrade = 0;
-        int pitchNumber = 0;
-        int totalTime = 0;
-        for (Route r: context.pastRouteList) {
-            allValues += r.getGrade();
-            pitchNumber += r.getPitchNumber();
-            totalTime += r.getRouteTime();
-            if (r.getGrade() > maxGrade) {
-                maxGrade = r.getGrade();
+        if (context.pastRouteList.size() != 0) {
+            ScaleConverter scaleConverter = new ScaleConverter();
+            int allValues = 0;
+            int maxGrade = 0;
+            int pitchNumber = 0;
+            int totalTime = 0;
+            for (Route r: context.pastRouteList) {
+                allValues += r.getGrade();
+                pitchNumber += r.getPitchNumber();
+                totalTime += r.getRouteTime();
+                if (r.getGrade() > maxGrade) {
+                    maxGrade = r.getGrade();
+                }
             }
+            int meanValue = Math.round(allValues/context.pastRouteList.size());
+            textViewMeanValue.setText(scaleConverter.Int2String("Kurtyki", meanValue));
+            textViewMaxValue.setText(scaleConverter.Int2String("Kurtyki", maxGrade));
+            textViewCountValue.setText(String.valueOf(context.pastRouteList.size()));
+            int totalHours = (int) totalTime / 3600;
+            int totalMins = (int) (totalTime - totalHours * 3600) / 60;
+            int totalSecs = (int) (totalTime - totalHours * 3600 - totalMins * 60);
+            String totalTimeString = String.valueOf(totalHours) + "h " + String.valueOf(totalMins) + "m " + String.valueOf(totalSecs) + "s";
+            textViewCountTimeValue.setText(totalTimeString);
+            textViewCountPitchValue.setText(String.valueOf(pitchNumber));
+        } else {
+            textViewMeanValue.setText("brak danych");
+            textViewMaxValue.setText("brak danych");
+            textViewCountValue.setText("brak danych");
+            textViewCountTimeValue.setText("brak danych");
+            textViewCountPitchValue.setText("brak danych");
         }
-        int meanValue = Math.round(allValues/context.pastRouteList.size());
-        ScaleConverter scaleConverter = new ScaleConverter();
-        textViewMeanValue.setText(scaleConverter.Int2String("Kurtyki", meanValue));
-        textViewMaxValue.setText(scaleConverter.Int2String("Kurtyki", maxGrade));
-        textViewCountValue.setText(String.valueOf(context.pastRouteList.size()));
-        int totalHours = (int) totalTime / 3600;
-        int totalMins = (int) (totalTime - totalHours * 3600) / 60;
-        int totalSecs = (int) (totalTime - totalHours * 3600 - totalMins * 60);
-        String totalTimeString = String.valueOf(totalHours) + "h " + String.valueOf(totalMins) + "m " + String.valueOf(totalSecs) + "s";
-        textViewCountTimeValue.setText(totalTimeString);
-        textViewCountPitchValue.setText(String.valueOf(pitchNumber));
+
+
 
         return root;
     }
