@@ -16,6 +16,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -24,6 +26,8 @@ public class RegisterActivity extends AppCompatActivity {
     private ProgressBar prBar;
 
     private FirebaseAuth mFirebaseAuth;
+    private FirebaseDatabase database;
+    private DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         //Get firebase instance
         mFirebaseAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+        reference = database.getReference(); // root
         //Initialize view contents
         initialize();
 
@@ -56,8 +62,8 @@ public class RegisterActivity extends AppCompatActivity {
         //Init progress bar - przetestować działanie
         prBar.setVisibility(View.VISIBLE);
         //Local login and email vars
-        String em = email.getText().toString();
-        String pass = password.getText().toString();
+        final String em = email.getText().toString();
+        final String pass = password.getText().toString();
         //Empty fields
         if(TextUtils.isEmpty(em)) {
             Toast.makeText(getApplicationContext(), "Enter email", Toast.LENGTH_LONG).show();
@@ -73,6 +79,7 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
+                            writeNewUser(em, mFirebaseAuth.getUid());
                             Toast.makeText(getApplicationContext(), "Registration successful!", Toast.LENGTH_LONG).show();
                             prBar.setVisibility(View.GONE);
                             finish(); //lub nowy intent
@@ -91,5 +98,9 @@ public class RegisterActivity extends AppCompatActivity {
         regBtn = findViewById(R.id.register);
         cancelBtn = findViewById(R.id.cancel);
         prBar = findViewById(R.id.progressBar);
+    }
+    private void writeNewUser(String email, String UID){
+        User user = new User(email, UID);
+        reference.child("users").child(UID).setValue(0);
     }
 }

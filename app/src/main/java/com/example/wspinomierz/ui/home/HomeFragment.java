@@ -6,10 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.wspinomierz.MainActivity;
@@ -21,17 +19,23 @@ public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private MainActivity context;
+    private TextView textViewMeanValue;
+    private TextView textViewMaxValue;
+    private TextView textViewCountValue;
+    private TextView textViewCountTimeValue;
+    private TextView textViewCountPitchValue;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        final TextView textViewMeanValue = root.findViewById(R.id.textViewMeanValue);
-        final TextView textViewMaxValue = root.findViewById(R.id.textViewMaxValue);
-        final TextView textViewCountValue = root.findViewById(R.id.textViewCountValue);
-        final TextView textViewCountTimeValue = root.findViewById(R.id.textViewCountTimeValue);
-        final TextView textViewCountPitchValue = root.findViewById(R.id.textViewCountPitchValue);
+        textViewMeanValue = root.findViewById(R.id.textViewMeanValue);
+        textViewMaxValue = root.findViewById(R.id.textViewMaxValue);
+        textViewCountValue = root.findViewById(R.id.textViewCountValue);
+        textViewCountTimeValue = root.findViewById(R.id.textViewCountTimeValue);
+        textViewCountPitchValue = root.findViewById(R.id.textViewCountPitchValue);
+
 //        homeViewModel.getText().observe(this, new Observer<String>() {
 //            @Override
 //            public void onChanged(@Nullable String s) {
@@ -45,7 +49,7 @@ public class HomeFragment extends Fragment {
             int maxGrade = 0;
             int pitchNumber = 0;
             int totalTime = 0;
-            for (Route r: context.pastRouteList) {
+            for (Route r : context.pastRouteList) {
                 allValues += r.getGrade();
                 pitchNumber += r.getPitchNumber();
                 totalTime += r.getRouteTime();
@@ -53,7 +57,7 @@ public class HomeFragment extends Fragment {
                     maxGrade = r.getGrade();
                 }
             }
-            int meanValue = Math.round(allValues/context.pastRouteList.size());
+            int meanValue = Math.round(allValues / context.pastRouteList.size());
             textViewMeanValue.setText(scaleConverter.Int2String("Kurtyki", meanValue));
             textViewMaxValue.setText(scaleConverter.Int2String("Kurtyki", maxGrade));
             textViewCountValue.setText(String.valueOf(context.pastRouteList.size()));
@@ -72,7 +76,8 @@ public class HomeFragment extends Fragment {
         }
 
 
-
         return root;
     }
+
+
 }

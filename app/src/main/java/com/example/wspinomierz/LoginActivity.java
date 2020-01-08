@@ -67,10 +67,12 @@ public class LoginActivity extends AppCompatActivity {
         String pass = password.getText().toString();
         //Empty fields
         if(TextUtils.isEmpty(em)) {
+            prBar.setVisibility(View.GONE);
             Toast.makeText(getApplicationContext(), "Enter email", Toast.LENGTH_LONG).show();
             return;
         }
         if(TextUtils.isEmpty(pass)){
+            prBar.setVisibility(View.GONE);
             Toast.makeText(getApplicationContext(), "Enter email", Toast.LENGTH_LONG).show();
             return;
         }

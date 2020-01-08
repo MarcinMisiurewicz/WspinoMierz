@@ -12,6 +12,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 
 import androidx.annotation.NonNull;
@@ -37,7 +41,7 @@ public class addRouteFragment extends Fragment {
     private Route routeToAdd;
     private MainActivity context;
     private boolean ifPast;
-
+    private FirebaseAuth mFirebaseAuth;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -45,6 +49,8 @@ public class addRouteFragment extends Fragment {
         addRouteViewModel =
                 ViewModelProviders.of(this).get(com.example.wspinomierz.ui.addRoute.addRouteViewModel.class);
         View root = inflater.inflate(R.layout.fragment_addroute, container, false);
+
+        mFirebaseAuth = FirebaseAuth.getInstance();
 
         final ScaleConverter scaleConverter = new ScaleConverter();
         final EditText routeNameEditText = root.findViewById(R.id.routeName);
@@ -134,7 +140,7 @@ public class addRouteFragment extends Fragment {
                     routeToAdd = new Route(name, grade, context.lastLocation, pitchNumber);
                     routeToAdd.setUserGrade(userGrade);
                     routeToAdd.setRouteTime(routeTime);
-                    context.pastRouteList.add(routeToAdd);
+                    syncWithDb(routeToAdd, true);
                     saveToFile(root, context.FILE_NAME_PAST_LIST, context.pastRouteList);
                 } else {
                     if(routeLocationEditText.getText().toString().isEmpty()) {
@@ -152,7 +158,7 @@ public class addRouteFragment extends Fragment {
                     futureLocation.setLatitude(Double.parseDouble(parts[0]));
                     futureLocation.setLongitude(Double.parseDouble(parts[1]));
                     routeToAdd = new Route(name, grade, futureLocation, pitchNumber);
-                    context.routeList.add(routeToAdd);
+                    syncWithDb(routeToAdd, false);
                     saveToFile(root, context.FILE_NAME_LIST, context.routeList);
 
                 }
@@ -166,6 +172,18 @@ public class addRouteFragment extends Fragment {
 //            }
 //        });
         return root;
+    }
+
+    private void syncWithDb(Route routeToAdd, boolean done) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        if(done){
+            DatabaseReference routesRef = database.getReference().child("users").child(mFirebaseAuth.getUid()).child("pastRoutesList");
+            routesRef.push().setValue(routeToAdd);
+        }
+        else{
+            DatabaseReference routesRef = database.getReference().child("users").child(mFirebaseAuth.getUid()).child("routesList");
+            routesRef.push().setValue(routeToAdd);
+        }
     }
 
     private static int toSeconds(String s) {

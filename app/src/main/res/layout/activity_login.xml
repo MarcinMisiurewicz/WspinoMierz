@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Account login"/>
+        android:text="Zaloguj się"/>
     <EditText
         android:id="@+id/email"
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Password"
+        android:hint="Hasło"
         android:inputType="textPassword" />
 
     <Button
@@ -40,5 +40,5 @@
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Create an account"/>
+        android:text="Stwórz konto"/>
 </LinearLayout>

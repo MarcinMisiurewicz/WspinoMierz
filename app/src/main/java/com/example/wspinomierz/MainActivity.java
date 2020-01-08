@@ -21,8 +21,15 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.wspinomierz.ui.list.RouteArrayAdapter;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -43,6 +50,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -82,29 +90,28 @@ public class MainActivity extends AppCompatActivity {
         if(fileList.exists()) {
             routeList = loadFromFile(FILE_NAME_LIST);
         } else {
-            routeList = new ArrayList<Route>(
-//                    Arrays.asList(
-//                            new Route("a", 0, testLocation, 0),
-//                            new Route("b", 1, testLocation, 2),
-//                            new Route("c", 2, testLocation, 4)
-//                    )
-            );
+/*            routeList = new ArrayList<Route>(
+                    Arrays.asList(
+                            new Route("a", 0, testLocation, 0),
+                            new Route("b", 1, testLocation, 2),
+                            new Route("c", 2, testLocation, 4)
+                    )
+            );*/
         }
         File filePastList = new File(dir + "/" + FILE_NAME_LIST);
         if(filePastList.exists()) {
             pastRouteList = loadFromFile(FILE_NAME_PAST_LIST);
         } else {
             pastRouteList = new ArrayList<Route>();
-//            Route r1 = new Route("a", 0, testLocation, 0);
-//            r1.setRouteTime(1);
-//            r1.setUserGrade(2);
-//            Route r2 = new Route("a", 0, testLocation, 0);
-//            r2.setRouteTime(1);
-//            r2.setUserGrade(2);
-//            pastRouteList.add(r1);
-//            pastRouteList.add(r2);
+/*            Route r1 = new Route("a", 0, testLocation, 0);
+            r1.setRouteTime(1);
+            r1.setUserGrade(2);
+            Route r2 = new Route("a", 0, testLocation, 0);
+            r2.setRouteTime(1);
+            r2.setUserGrade(2);
+            pastRouteList.add(r1);
+            pastRouteList.add(r2);*/
         }
-
 
 //        String json = new Gson().toJson(pastRouteList);
 
@@ -139,8 +146,9 @@ public class MainActivity extends AppCompatActivity {
         startLocationUpdates();
 
         mFirebaseAuth = FirebaseAuth.getInstance();
+        //addRoutes();
         setContentView(R.layout.activity_main);
-        InitializeUI();
+        initializeUI();
 //        Toolbar toolbar = findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
 ////        FloatingActionButton fab = findViewById(R.id.fab);
@@ -155,6 +163,42 @@ public class MainActivity extends AppCompatActivity {
 //        NavigationView navigationView = findViewById(R.id.nav_view);
 //        // Passing each menu ID as a set of Ids because each
 //        // menu should be considered as top level destinations.
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference routesRef = database.getReference().child("users").child(mFirebaseAuth.getUid()).child("routesList");
+        DatabaseReference pastRef = database.getReference().child("users").child(mFirebaseAuth.getUid()).child("pastRoutesList");
+
+        routesRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                routeList = new ArrayList<Route>();
+                for(DataSnapshot childSnapshot : dataSnapshot.getChildren()){
+                    Route route = deserializeRoute((childSnapshot.getValue().toString()));
+                    routeList.add(route);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        pastRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                pastRouteList = new ArrayList<Route>();
+                for(DataSnapshot childSnapshot : dataSnapshot.getChildren()){
+                    Route route = deserializeRoute((childSnapshot.getValue().toString()));
+                    pastRouteList.add(route);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_list, R.id.nav_statistics, R.id.nav_map, R.id.nav_calc,
                 R.id.nav_timer)
@@ -163,6 +207,21 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+    }
+
+
+    //test do wrzucania do db
+    private void addRoutes() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference routesRef = database.getReference().child("users").child(mFirebaseAuth.getUid()).child("routesList");
+        DatabaseReference pastRef = database.getReference().child("users").child(mFirebaseAuth.getUid()).child("pastRoutesList");
+        for(Route route : routeList){
+            routesRef.push().setValue(route);
+        }
+
+        for(Route route : pastRouteList){
+            pastRef.push().setValue(route);
+        }
     }
 
     @Override
@@ -199,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    private void InitializeUI(){
+    private void initializeUI(){
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         drawer = findViewById(R.id.drawer_layout);
@@ -269,5 +328,10 @@ public class MainActivity extends AppCompatActivity {
         Gson gson = new Gson();
         Type listType = new TypeToken<ArrayList<Route>>(){}.getType();
         return gson.fromJson(s, listType);
+    }
+    public Route deserializeRoute(String s){
+        Gson gson = new Gson();
+        Type type = new TypeToken<Route>(){}.getType();
+        return gson.fromJson(s, type);
     }
 }
